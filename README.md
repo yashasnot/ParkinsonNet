@@ -37,72 +37,85 @@ Parkinson's Disease is a progressive neurological disorder. Early detection can 
 
 ### Installation
 
-git clone <repository-url>
-cd <repository-directory>
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
 
-pip install streamlit pandas numpy matplotlib seaborn scikit-learn joblib
-Running the App
+2.  **Install required Python packages:**
+    ```bash
+    pip install streamlit pandas numpy matplotlib seaborn scikit-learn joblib
+    ```
+
+3. pip install streamlit pandas numpy matplotlib seaborn scikit-learn joblib
+
+### Running the Application
+
+1.  **Ensure you have pre-trained models:**
+    * You can use the `ml_models.py` script to train and save example models (KNN, Random Forest, SVM) using the provided `train_data.txt`. Running this script will generate `.pkl` files (e.g., `knn_parkinson.pkl`, `rf_parkinson.pkl`, `SVM_parkinson.pkl`).
+    ```bash
+    python ml_models.py
+    ```
+    * Alternatively, use your own pre-trained models saved in `.pkl` or `.joblib` format.
+
+2.  **Launch the Streamlit dashboard:**
+    ```bash
+    streamlit run frontend.py
+    ```
+    This will open the dashboard in your default web browser.
 
 ### 🛠️ How to Use
-- Upload Models:
-Use the sidebar to upload up to 3 pre-trained ML models.
+1.  **Upload Your Models:**
+    * On the sidebar, use the file uploaders to select your trained model files (`.pkl` or `.joblib`).
+    * Optionally, provide a custom name for each model.
 
-Optionally assign custom names to each model.
+2.  **Upload Your Dataset:**
+    * In the main section, upload your test dataset (CSV or TXT format).
+    * The application assumes the last column of your dataset is the target variable.
 
-- Upload Test Dataset:
+3.  **Configure Parsing Options:**
+    * Select the appropriate delimiter for your dataset (e.g., comma, semicolon, tab).
+    * Indicate if your dataset has a header row.
+    * Specify if the first column should be used as the index.
 
- Use the main window to upload your test dataset (.csv or .txt).
+4.  **Run Comparison Analysis:**
+    * Once models and data are uploaded, click the "Run Comparison Analysis" button.
 
-The last column is assumed to be the target variable.
-
-- Configure Parsing Options:
-
-Choose delimiter (comma, semicolon, tab, etc.)
-
-Indicate presence of header and index column.
-
-- Run Analysis:
-
- **Click “Run Comparison Analysis” to start.**
-
-- Explore Results:
-
-- Performance Metrics: Visual bar chart highlighting top-performing model.
-
-- Confusion Matrices: For each model with download option.
-
-- Prediction Comparison: Side-by-side result comparison with heatmap of agreement across models.
-
-- Agreement Stats: Percent agreement and correct consensus rate.
+5.  **Explore Results:**
+    * **Performance Metrics Tab:** View key metrics like accuracy for each model. The best model is highlighted, and a bar chart provides a visual comparison.
+    * **Confusion Matrices Tab:** Examine the confusion matrix for each model. You can download the plot for each matrix.
+    * **Detailed Comparison Tab:**
+        * See a sample-by-sample comparison of true values versus predictions from each model.
+        * If "Show Detailed Metrics" is enabled in the sidebar and multiple models are loaded, a model agreement heatmap is displayed, showing the percentage of predictions on which pairs of models agree.
+        * Statistics on overall model agreement and correct agreements are also provided.
 
 ### 📁 Code Breakdown
--frontend.py
-Manages UI/UX, data upload, and output rendering.
+### `frontend.py`
 
--Contains helper functions:
+-   Handles the Streamlit user interface, file uploads, and display of results.
+-   Includes helper functions for:
+    -   `preprocess_data()`: Basic preprocessing for the input dataset (currently samples 100 rows and scales features; **customize this for your specific data**).
+    -   `get_model_predictions()`: Loads uploaded models and generates predictions.
+    -   `plot_confusion_matrix()`: Creates confusion matrix plots.
+    -   `calculate_metrics()`: Computes performance metrics like accuracy.
+-   Uses custom CSS for enhanced visual styling.
 
-preprocess_data(): Loads and scales test data.
+### `ml_models.py`
 
-get_model_predictions(): Generates predictions from uploaded models.
+-   A script to demonstrate training and saving three types of machine learning models:
+    -   K-Nearest Neighbors (KNN)
+    -   Random Forest
+    -   Support Vector Machine (SVM)
+-   Uses `train_data.txt` for training.
+-   Performs basic hyperparameter tuning for KNN and Random Forest.
+-   Saves the trained models using `joblib` into `.pkl` files.
+-   Generates and saves a correlation matrix heatmap (`Correlation Matrix Test Data.png`).
 
-plot_confusion_matrix(): Visualizes model confusion matrices.
+### Data
 
-calculate_metrics(): Computes accuracy and other metrics.
-
-## ml_models.py
-Trains and saves 3 classifiers using train_data.txt:
-
-**KNN**
-
-**Random Forest**
-
-**SVM**
-
-Performs basic hyperparameter tuning.
-
-Saves model files for dashboard testing.
-
-Outputs a correlation matrix plot for data insight.
+-   `train_data.txt`: A plain text file where each row represents a sample and columns are feature values, with the last column being the target variable. The delimiter appears to be a comma.
+-   `Correlation Matrix Test Data.jpg`: An image showing a heatmap of feature correlations, likely generated during the model training/exploration phase.
 
 ### 📊 Dataset
 - Format: Plain text or CSV
@@ -122,8 +135,9 @@ Outputs a correlation matrix plot for data insight.
 
 ### 👨‍💻 Authors
 
-Yashas Raina
-Ritwik Mittal
+-Yashas Raina
+
+-Ritwik Mittal
 
 ### 📄 License
 This project is open-source. Refer to the LICENSE file for usage guidelines. If none is provided, it is intended for educational and research purposes.
